@@ -1,0 +1,56 @@
+/* Dimension */
+
+.h-modal{
+    height: 25px !important;
+}
+.fsmall{
+    font-size: 0.8rem;
+}
+
+/* Cart  */
+.cart-modal{
+    position: fixed;
+    right: -300px;
+    top: 30px;
+    bottom: 0;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    width: 300px;
+    background: #fff;
+    transition: .5s all;
+    overflow-x: scroll;
+    z-index: 100;
+}
+
+.cart-modal.open{
+    right: 0;
+    padding: 20px;
+    border-radius: 20px 0;
+}
+
+.box-info{
+    border-top: solid 1px var(--bs-gray-400);
+    margin-top: 15px;
+    padding: 10px 0px 10px 0px;
+}
+
+/*  Price  */
+.box-price{
+    display: flex;
+    gap: 3px;
+} 
+
+.box-price > input {
+    width: 50px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* Button Modal */
+
+.btn-modal{
+    height: 25px;
+    padding: 0 10px !important;
+}
+

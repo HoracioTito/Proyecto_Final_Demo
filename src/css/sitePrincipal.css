@@ -1,0 +1,23 @@
+html {
+    scroll-behavior: smooth;
+}
+
+.footer-color{
+    background-color: rgb(0, 0, 0);
+    color: white !important;
+    position: relative;
+    bottom: 0;
+}
+
+.color-w{
+    color: white;
+}
+
+.spinner-redirect{
+    height: 100px !important;
+    width: 100px !important;
+}
+
+.text-center{
+    text-align: center;
+}

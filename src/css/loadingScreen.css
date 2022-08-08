@@ -1,0 +1,21 @@
+.overlay{
+    position: fixed;
+}
+
+.spinner-center{
+
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+    height: 100vh;
+    flex-direction: column-reverse;
+ 
+    align-items: center;
+    background-color: black;
+    opacity: 0.5;
+}
+
+.spinner-w{
+    height: 200px !important;
+    width: 200px !important;
+}
