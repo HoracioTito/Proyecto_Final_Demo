@@ -9,6 +9,7 @@ import { filterHeadlineThunk } from '../store/slices/products.slice'
 import { Row, Col, InputGroup, Form, Button, ListGroup, Container } from "react-bootstrap";
 import axios from 'axios';
 import Card from 'react-bootstrap/Card'
+import { addCartThunk } from '../store/slices/cart.slice';
 
 /* Trunk  */
 
@@ -50,20 +51,32 @@ const Home = () => {
 
     }, [])
 
-    /*  Categorias */
+    /*  Categorias 
     useEffect(() => {
         dispatch(getProductsTrunk())
         axios.get('https://ecommerce-api-react.herokuapp.com/api/v1/products/categories')
             .then(res => setCategories(res.data.data.categories))
 
-    }, [])
+    }, []) */
+
+    
+    /* Client : addProduct */
+    const addProduct = (id, quantity) => {
+        console.log(id + "-" + quantity)
+        if (localStorage.getItem("token")) {
+
+            dispatch(addCartThunk(id, quantity))
+        } else {
+
+            navigate("/login")
+        }
+    }
+
 
 
     console.log(categories)
 
     return (
-
-
         <>
             <Container>
                 <Row>
@@ -100,6 +113,8 @@ const Home = () => {
                             {categories.map((category) => (
                                 <ListGroup.Item
                                     onClick={() => dispatch(filterCategorisThunk(category.id))}
+                                    style={{ cursor : 'pointer' }}
+                                    key={category.name}
                                 >
                                     {category.name}
                                 </ListGroup.Item>
@@ -113,11 +128,15 @@ const Home = () => {
                             {
                                 products.map((product) => (
 
-                                    <Col>
-                                        <Card key={product.id} >
+                                    <Col key={product.productImgs?.[0]} >
+                                        <Card  >
                                             <Card.Img variant="top"
-                                                src={product.productImgs[0]} style={{ height: '160px', objectFit: 'contain', padding: '10px', cursor: 'pointer' }}
+                                                src={product.productImgs[0]} 
+                                                style={{ height: '160px', objectFit: 'contain', padding: '10px', cursor: 'pointer' }}
                                                 onClick={() => navigate(`/product/${product.id}`)}
+                                                onMouseOver={e=>e.target.src= product.productImgs?.[1] }
+                                                onMouseOut ={e=>e.target.src= product.productImgs?.[0] }
+                                                 
                                             />
                                             <Card.Body>
                                                 {/*<Card.Title>{product.title}</Card.Title>*/}
@@ -125,13 +144,10 @@ const Home = () => {
                                                     {product.title}
 
                                                 </Card.Text>
-
-
-
                                             </Card.Body>
                                             <div className='card-footer'>
                                                 <div>{product.price}</div>
-                                                <Button variant="primary">Cart</Button>
+                                                <Button onClick={() => addProduct(product.id, 1)} className="btn btn-primary btn-sm " >Cart</Button >
                                             </div>
                                         </Card>
                                     </Col>

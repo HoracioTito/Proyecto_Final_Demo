@@ -45,12 +45,16 @@ const Login = () => {
                 token[2] = res.data.data.user.lastName
                 console.log(token)
                 localStorage.setItem("token", token[0])
-                localStorage.setItem("userName", token[1] + " " + token[2])
+                localStorage.setItem("userName", token[1])
                 window.location.reload(false);
 
             })
             .catch(error => {
                 console.log(error)
+                if(error.response.status === 404 ){
+                    alert("Error Credencials")
+                }
+                
                 // setToken([])
             })
     }

@@ -32,7 +32,7 @@ function App() {
     <div className='App'>
       <HashRouter>
         <NavBar />
-        {isLoading && <LoadingScreen />}
+        { isLoading && <LoadingScreen /> }
 
         <Routes>
           <Route path="/" element={<Home />} />

@@ -158,19 +158,13 @@ const Product = () => {
 
                             <Col sm={3} key={suggest.id}>
                                 <Card style={{ width: '100%', padding: 10, marginTop: 20 }} >
-                                    <Card.Img variant="top"
+                                    <img variant="top"
                                         src={suggest.productImgs?.[0]}
                                         style={{ height: '100px', objectFit: 'contain', padding: '10px', cursor: 'pointer' }}
                                         onClick={() => navigate(`/product/${suggest.id}`)}
-
+                                        onMouseOver={e=>e.target.src= suggest.productImgs?.[1] }
+                                        onMouseOut ={e=>e.target.src= suggest.productImgs?.[0] }
                                     />
-                                    <Card.Img variant="top"
-                                        src={suggest.productImgs?.[1]}
-                                        style={{ height: '100px', objectFit: 'contain', padding: '10px', cursor: 'pointer' }}
-                                        className='overlay'
-
-                                    />
-
                                     <Card.Body>
 
                                         <Card.Text>
