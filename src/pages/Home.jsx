@@ -88,18 +88,18 @@ const Home = () => {
                     <Col>
                         <InputGroup className="mb-3">
                             <Form.Control
-                                placeholder="Recipient's username"
-                                aria-label="Recipient's username"
+                                placeholder="Search Products"
+                                aria-label="Search Products "
                                 aria-describedby="basic-addon2"
                                 onChange={(e) => setSearchValue(e.target.value)}
                                 value={searchValue}
                             />
-                            <Button
-                                variant="outline-secondary"
+                            <button
+                                 className="btn btn-secondary " 
                                 onClick={() => dispatch(filterHeadlineThunk(searchValue))}
                             >
-                                Button
-                            </Button>
+                                Search
+                            </button>
                         </InputGroup>
 
                     </Col>
@@ -146,7 +146,7 @@ const Home = () => {
                                                 </Card.Text>
                                             </Card.Body>
                                             <div className='card-footer'>
-                                                <div>{product.price}</div>
+                                                <div>{product.price} $</div>
                                                 <Button onClick={() => addProduct(product.id, 1)} className="btn btn-primary btn-sm " >Cart</Button >
                                             </div>
                                         </Card>

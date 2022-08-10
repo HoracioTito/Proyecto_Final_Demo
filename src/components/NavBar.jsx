@@ -4,13 +4,16 @@ import '../css/sitePrincipal.css'
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 
-import { Navbar, Nav, NavDropdown, InputGroup, Form, Button } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown, InputGroup, Form, Button, Modal, Alert, Row } from 'react-bootstrap';
 import { Container } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { delCartThunk, getCartThunk, qtyCartThunk } from '../store/slices/cart.slice';
-import ProductsCart from './ProductsCart';
+
 import { useNavigate } from 'react-router-dom';
 import { filterHeadlineThunk } from '../store/slices/products.slice';
+import { checkoutTrunk } from '../store/slices/purchases.slice';
+import ModalUtils from './ModalUtils';
+import ProductsCart from './ProductsCart';
 
 
 
@@ -28,6 +31,19 @@ const NavBar = () => {
   /* Modal CSS  */
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
+
+  /*  Modal Message */
+  const [show, setShow] = useState(false);
+  const [messageModal, setMessageModal] = useState(false);
+
+  const handleClose = () => setShow(false)
+  const handleShow = (text) => {
+    setMessageModal(text)
+    setShow(true)
+
+    setTimeout(() => handleClose(), 2000)
+  }
+
 
   /* Is Login ? */
   useEffect(() => {
@@ -52,9 +68,10 @@ const NavBar = () => {
     if (localStorage.getItem("token")) {
       setIsCartOpen(!isCartOpen);
       dispatch(getCartThunk());
+
       // alert(isCartOpen)
     } else {
-      alert("login")
+      // alert("login")
       setIsCartOpen(false)
       navigate("/login")
     };
@@ -62,7 +79,7 @@ const NavBar = () => {
 
   /* Search Products */
 
-  const searchProduct=(searchValue)=>{
+  const searchProduct = (searchValue) => {
     dispatch(filterHeadlineThunk(searchValue))
     navigate('/')
   }
@@ -89,11 +106,19 @@ const NavBar = () => {
     if (localStorage.getItem("token")) {
       setIsCartOpen(!isCartOpen);
       dispatch(qtyCartThunk(id, quantity));
+      handleShow("Quantity modifid") // Modal 
 
     } else {
       // alert("login")
       navigate("/login")
     };
+  }
+
+  /* Checkout */
+
+  const checkout=(total)=>{
+    alert(total)
+    dispatch(checkoutTrunk(total))
   }
 
 
@@ -125,33 +150,39 @@ const NavBar = () => {
                   <i className="fa-solid fa-cart-shopping"></i>
                 </button>
               </Nav.Link>
+              <Nav.Link >
+                <Form className="d-flex">
+                  <Form.Control
+                    placeholder="Search"
 
-              <Form className="d-flex">
-                <Form.Control
-                  placeholder="Search"
+                    onChange={(e) => setSearchValue(e.target.value)}
+                    value={searchValue}
+                    className="me-2"
+                    variant="h-modal"
+                  />
+                  <Button
 
-                  onChange={(e) => setSearchValue(e.target.value)}
-                  value={searchValue}
-                  className="me-2"
-                />
-                <Button
-
-                  className="btn btn-secondary my-2 my-sm-0"
-                  onClick={() => searchProduct(searchValue)}
-                >
-                  Button
-                </Button>
-              </Form>
-
+                    className="btn btn-secondary my-2 my-sm-0"
+                    onClick={() => searchProduct(searchValue)}
+                  >
+                    Search
+                  </Button>
+                </Form>
+              </Nav.Link >
 
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
 
+      
+      <ProductsCart cartList={cartList} isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} delProduct={delProduct} qtyProduct={qtyProduct} checkout={checkout} />
+     
+      <ModalUtils show={show} handleClose={handleClose} messageModal={messageModal} />
 
-      <ProductsCart cartList={cartList} isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} delProduct={delProduct} qtyProduct={qtyProduct} />
+
     </>
+
 
   );
 };

@@ -1,4 +1,4 @@
-import { Button, Col, Container, Form, Row, Spinner, Stack } from 'react-bootstrap';
+import { Alert, Button, Col, Container, Form, Modal, Row, Spinner, Stack } from 'react-bootstrap';
 
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
@@ -12,25 +12,30 @@ import { setIsLoading } from '../store/slices/isLoading.slice';
 
 const Login = () => {
 
-    const dispatch = useDispatch()
     const isLoading = useSelector((state) => state.isLoading);
 
-
-    //{setTimeout(() => dispatch(setIsLoading(false)), 2000)}
-    //setTimeout (()=> setIsLoading(false) , 3000)
-
-    /* Navigate - redirect */
-
+    /* Navigate - redirect / Disapatch */
+    const dispatch = useDispatch()
     const navigate = useNavigate()
-
-    /*  Form react */
-    const { register, handleSubmit } = useForm()
 
     /* Hidden isLoadin */
 
     const loadingHidden = () => {
         dispatch(setIsLoading(false))
     }
+
+    /*  Modal Message */
+    const [show, setShow] = useState(false);
+    const [messageModal, setMessageModal] = useState(false);
+
+    const handleClose = () => setShow(false)
+    const handleShow = (text) => {
+        setMessageModal(text)
+        setShow(true)
+    }
+
+    /*--   Form react  --*/
+    const { register, handleSubmit } = useForm()
 
     /* Get Token*/
     const getToken = (dataObj) => {
@@ -51,13 +56,13 @@ const Login = () => {
             })
             .catch(error => {
                 console.log(error)
-                if(error.response.status === 404 ){
-                    alert("Error Credencials")
+                if (error.response.status === 404) {
+                    handleShow('Username and/or password do not match')
                 }
-                
-                // setToken([])
+
             })
     }
+
 
     /* Reception info Form */
     const submit = (data) => {
@@ -66,16 +71,15 @@ const Login = () => {
         /*  Form control */
 
         if (data.email === "" || data.password === "") {
-            alert("Campo vacio")
+            handleShow('Empty username and/or password')
 
         } else if (data.password.length > 5) {
             /* Request info */
             getToken(data)
         } else {
-            alert("Password menos a 5 caracteres !!!")
+            handleShow('Password with less than 5 characters')
         }
     }
-
 
     return (
         <Container >
@@ -109,11 +113,11 @@ const Login = () => {
 
                                         <button className="btn btn-primary" >Login</button>
                                         <br />
-                                        <br/>
+                                        <br />
                                         <p>user: hchoque@gmail</p>
                                         <p>Password: pass0123</p>
                                         <br />
-                                       
+
                                     </Form>
 
                                 ) : (
@@ -136,8 +140,31 @@ const Login = () => {
                     </div>
                 </Col>
             </Row>
+            <Row>
+                <Modal show={show} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Login</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Alert variant='secondary' >
+                            {messageModal}
+                        </Alert>
+
+                    </Modal.Body>
+                    <Modal.Footer>
+
+                        <Button variant="primary" onClick={handleClose}>
+                            Close
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+            </Row>
+
             <script> onLoad={setTimeout(() => loadingHidden(), 2000)} </script>
         </Container>
+
+
+
 
     );
 };

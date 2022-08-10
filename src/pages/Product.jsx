@@ -10,10 +10,11 @@ import Button from 'react-bootstrap/Button';
 
 // import "../../node_modules/bootstrap/dist/css/bootstrap.css"
 /*  CSS  */
-import { Container, Row, Col, Card } from 'react-bootstrap';
+import { Container, Row, Col, Card, Modal, Alert } from 'react-bootstrap';
 import InputQuantity from '../components/InputQuantity';
 import ImageProduct from '../components/ImageProduct';
 import ProductsCart from '../components/ProductsCart';
+import ModalUtils from '../components/ModalUtils';
 
 
 
@@ -36,26 +37,30 @@ const Product = () => {
     const [productDetail, setProductDetail] = useState([])
     const [productsSuggest, setproductsSuggest] = useState([])
 
+    /*  Modal Message */
+    const [show, setShow] = useState(false);
+    const [messageModal, setMessageModal] = useState(false);
+
+    const handleClose = () => setShow(false)
+    const handleShow = (text) => {
+        setMessageModal(text)
+        setShow(true)
+
+        setTimeout(() => handleClose(), 2000)
+    }
+
     /* Client : addProduct */
     const addProduct = (id, quantity) => {
         console.log(id + "-" + quantity)
         if (localStorage.getItem("token")) {
 
             dispatch(addCartThunk(id, quantity))
+            handleShow('Loaded product')
         } else {
 
             navigate("/login")
         }
     }
-
-
-    /* getCartThunk */
-    const getCart = () => {
-        alert("NO usado ")
-        ///  dispatch(getCartThunk())
-
-    }
-
 
     /* Get Product - Ecommers  */
     useEffect(() => {
@@ -93,8 +98,6 @@ const Product = () => {
     console.log(messages) */
     console.log('-------------------------------------------')
     console.log(cartList)
-
-
 
     return (
         <>
@@ -162,8 +165,8 @@ const Product = () => {
                                         src={suggest.productImgs?.[0]}
                                         style={{ height: '100px', objectFit: 'contain', padding: '10px', cursor: 'pointer' }}
                                         onClick={() => navigate(`/product/${suggest.id}`)}
-                                        onMouseOver={e=>e.target.src= suggest.productImgs?.[1] }
-                                        onMouseOut ={e=>e.target.src= suggest.productImgs?.[0] }
+                                        onMouseOver={e => e.target.src = suggest.productImgs?.[1]}
+                                        onMouseOut={e => e.target.src = suggest.productImgs?.[0]}
                                     />
                                     <Card.Body>
 
@@ -189,6 +192,7 @@ const Product = () => {
                     }
                 </Row>
             </Container>
+            <ModalUtils show={show} handleClose={handleClose} messageModal={messageModal} />
         </>
 
     );
